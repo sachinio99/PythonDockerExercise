@@ -1,5 +1,6 @@
 import duckdb
 from IPython import InteractiveShell
+import subprocess
 
 from ploomber_test.parse import iterate_code_chunks
 
@@ -14,13 +15,14 @@ class CodeRunner:
         else:
             self.conn = duckdb.connect()
 
-    def run(self):
+    def run(self,python_version):
         for code in iterate_code_chunks(self.text):
             language = code["language"]
             print(f"Running: {code}")
 
             if language == "python":
                 execution = self.shell.run_cell(code["code"])
+                execution = subprocess.run(["docker", "run", "python:3.11", "python", "--version"])
                 execution.raise_error()
 
                 result = execution.result
