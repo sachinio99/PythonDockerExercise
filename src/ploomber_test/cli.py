@@ -6,7 +6,7 @@ from ploomber_test.runner import CodeRunner
 
 @click.group()
 def cli():
-    pass
+    print("hello from cli")
 
 
 @cli.command()
