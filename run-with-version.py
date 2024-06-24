@@ -19,18 +19,13 @@ def main():
     parser.add_argument("--version", type=str, help="The python version you want to use")
     parser.add_argument('filepath', type=str, help='Path to the Markdown file.')
     args = parser.parse_args()
-    removeAllExistingContainers()
+    #Verify the path and version
     verify_path(args)
     verify_version(args)
-    #Once we have verified the input we can start the docker container
-    container_name = f"container_{uuid.uuid4()}"
-    container = startDockerContainerInBackground(args.version, container_name)
-    run(args.filepath,container)
-    stopDockerContainer(container_name)
+    #Now run the function that runs the code blocks
+    run(args.filepath,args.version)
 
 
-
-#
 def verify_path(args):
     if not args.filepath:
         raise ValueError("File path is required")
@@ -44,25 +39,10 @@ def verify_version(args):
         float(args.version)
     except ValueError:
         raise ValueError("Python version must be a number")
-    
-def startDockerContainerInBackground(version, container_name):
-   client = docker.from_env()
-   container = client.containers.run(f"python:{version}", name = container_name, detach=True)
-   print(f"Started container with ID: {container.id}")
-   return container
-    
 
-def stopDockerContainer(container_id):
-    subprocess.run(["docker", "stop", container_id])
 
-def run(file_path,container):
-    CodeRunner(Path(file_path).read_text()).run(container)
-
-def removeAllExistingContainers():
-    client = docker.from_env()
-    for container in client.containers.list():
-        container.stop()
-        container.remove()
+def run(file_path,version):
+    CodeRunner(Path(file_path).read_text()).run(version)
 
 if __name__ == '__main__':
     main()
