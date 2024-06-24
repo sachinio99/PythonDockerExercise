@@ -1,8 +1,10 @@
 from pathlib import Path
 import argparse
 import subprocess
+import docker
 from ploomber_test.runner import CodeRunner
 import click 
+import uuid
 
 #This is the file that we will run to run all commands contained in a .md file in a specific format
 #docker container with the python version that is specified by the user
@@ -17,11 +19,15 @@ def main():
     parser.add_argument("--version", type=str, help="The python version you want to use")
     parser.add_argument('filepath', type=str, help='Path to the Markdown file.')
     args = parser.parse_args()
-    #subprocess.run(["docker", "run", "-d", f"python:{args.version}"])
+    removeAllExistingContainers()
     verify_path(args)
     verify_version(args)
     #Once we have verified the input we can start the docker container
-    startDockerContainerInBackground(args.version)
+    container_name = f"container_{uuid.uuid4()}"
+    container = startDockerContainerInBackground(args.version, container_name)
+    run(args.filepath,container)
+    stopDockerContainer(container_name)
+
 
 
 #
@@ -39,14 +45,24 @@ def verify_version(args):
     except ValueError:
         raise ValueError("Python version must be a number")
     
-def startDockerContainerInBackground(version):
-    subprocess.run(["docker", "run", "-d", f"python:{version}"])
+def startDockerContainerInBackground(version, container_name):
+   client = docker.from_env()
+   container = client.containers.run(f"python:{version}", name = container_name, detach=True)
+   print(f"Started container with ID: {container.id}")
+   return container
+    
 
 def stopDockerContainer(container_id):
     subprocess.run(["docker", "stop", container_id])
 
+def run(file_path,container):
+    CodeRunner(Path(file_path).read_text()).run(container)
+
+def removeAllExistingContainers():
+    client = docker.from_env()
+    for container in client.containers.list():
+        container.stop()
+        container.remove()
+
 if __name__ == '__main__':
     main()
-
-def run(file_path):
-    CodeRunner(Path(file_path).read_text()).run()
