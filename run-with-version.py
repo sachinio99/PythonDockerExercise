@@ -16,7 +16,7 @@ import uuid
 def main():
     print("Hello from the CLI! You have specified for the code in the .md file you passed to be executed in a docker container....")
     parser = argparse.ArgumentParser(description="Run code in a docker container with specified version")
-    parser.add_argument("--version", type=str, help="The python version you want to use")
+    parser.add_argument("--version", type=str, help="The python version you want to use for the image")
     parser.add_argument('filepath', type=str, help='Path to the Markdown file.')
     args = parser.parse_args()
     #Verify the path and version
