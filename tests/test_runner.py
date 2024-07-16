@@ -128,7 +128,7 @@ conn = sqlite3.connect("my-database.db")
 results = conn.execute("SELECT * FROM numbers")
 print(results)
 ```
-
+x
 
 ```sql
 SELECT * FROM my_table;

@@ -8,10 +8,12 @@ urlretrieve(
     "https://raw.githubusercontent.com/allisonhorst/palmerpenguins/master/inst/extdata/penguins.csv",
     "penguins.csv",
 )
+print("retrieved")
 ```
 
 
 ```sql
 SELECT * FROM penguins.csv LIMIT 3
 ```
+
 
