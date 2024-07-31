@@ -1,4 +1,4 @@
-# ploomber-test
+# Python with Docker and LLMs
 
 *Important: please keep all this content confidential.*
 
