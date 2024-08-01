@@ -1,17 +1,10 @@
-# Python with Docker and LLMs
+# Python with Docker
 
-*Important: please keep all this content confidential.*
 
-Pre-requisites:
 
-- [`miniconda`](https://docs.conda.io/en/latest/miniconda.html) (you can use a different environment manager if you prefer)
-- [`docker`](https://www.docker.com/products/docker-desktop/)
-- [`git`](https://git-scm.com/downloads)
-- A GitHub account 
 
 This project implements a command line interface to extract code snippets from a
-markdown file and execute them. Your job is to fix some bugs and implement
-Docker-based execution (more details below).
+markdown file and execute them. See Open PR 
 
 ## TO DO
 
@@ -26,13 +19,6 @@ python run-with-version.py examples/print-python-version.md --version 3.11
 
 ## Evaluation criteria
 
-- Funcionality (does the code perform the expected task?)
-- Code quality (is the code easy to read?)
-- User experience (how easy it is for someone completely new to use this?)
-- Time (how long did you take to get a working solution?)
-
-**Note:** They're all equally important, so don't ignore them!
-
 ## Guidelines
 
 - Each code chunk should have access to previously defined variables (e.g., `print(x)` in chunk 2 should work if chunk 1 has `x = 1`, see [`examples/print-python-version.md`](examples/print-python-version.md) for an example)
@@ -41,9 +27,7 @@ python run-with-version.py examples/print-python-version.md --version 3.11
 - The script should spin up and shut down the container, do not assume a container is already running
 - For a good user experience consider adding documentation, validate user input, and display clear error messages
 
-## Tips
 
-You can use the [Docker SDK for Python](https://github.com/docker/docker-py) or call the `docker` CLI via a subprocess.
 
 You can run `python -m build` (this uses the [`build`](https://github.com/pypa/build) package, which you can install via `pip install build`) to generate a tarball of this project. Then, you can install the project as a Python package with:
 
@@ -51,20 +35,10 @@ You can run `python -m build` (this uses the [`build`](https://github.com/pypa/b
 pip install path/to/tarball.tar.gz
 ```
 
-It is *not mandatory* to use `conda` inside the Docker container, you can use any Python package manager like (e.g., `pip`)
 
-## Extra
-
-If you have time, you can work on these items:
-
-- Add unit tests for `python run-with-version.py`
-- Fix the test `test_runner_sqlite`
-- When a `.md` has errors, the output is hard to read (try running `ploomber-test run examples/fail.md`). Improve the output so it is more readable and user can easily find what's the problem
-- Add support for running bash snippets (only Python and SQL are implemented)
 
 ## Installation
 
-*Note: If you have issues with the installation, or you prefer to use another environment manager (instead of conda), see the [troubleshooting](#troubleshooting) section.*
 
 ```sh
 pip install invoke
